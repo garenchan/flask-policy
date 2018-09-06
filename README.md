@@ -1,2 +1,2 @@
 # flask-policy
-RBAC for Flask applications.
+RBAC management for Flask applications.
