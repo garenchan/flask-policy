@@ -1,0 +1,21 @@
+{
+    "login_required": "role:user",
+    "is_admin": "role:admin",
+    "admin_or_owner": "rule:is_admin or id:%(user_id)s",
+
+    "index:head": "@",
+    "index:get": "rule:login_required",
+    "index:options": "@",
+
+    "user:head": "@",
+    "user:get": "rule:is_admin",
+    "user:options": "@",
+
+    "static:head": "@",
+    "static:get": "@",
+    "static:options": "@",
+  
+    "article:delete": "rule:login_required",
+    "article:options": "@",
+    "delete_article": "rule:admin_or_owner"
+}

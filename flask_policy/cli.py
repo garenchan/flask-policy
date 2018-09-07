@@ -14,21 +14,32 @@ from collections import OrderedDict
 
 import click
 from flask import current_app
-from flask.cli import cli, AppGroup, with_appcontext
+from flask.cli import AppGroup
 from policy import checks
+
+from flask_policy import _utils
+
 
 policy_cli = AppGroup('policy')
 
 
 @policy_cli.command('generate')
-@click.option('-f', '--policy-file', default='policy.json',
+@click.option('-f', '--policy-file', default='',
               help='Filename of policy file (default is "policy.json")')
 @click.option('--allow/--disallow', default=True,
               help='By default, all rules are allowed or not')
-@click.option('--mode', type=click.Choice(['safe', 'overwrite', 'update', 'append']),
+@click.option('-m', '--mode', type=click.Choice(['safe', 'overwrite', 'update', 'append']),
               help='When policy file already exists, do nothing or over write')
 def generate_policy_file(policy_file, mode, allow):
     """Generate default policy file."""
+
+    # If policy file option not set, we use the app's policy extension's setting.
+    if not policy_file:
+        policy_ext = getattr(current_app, 'extensions', {}).get('policy')
+        if policy_ext:
+            policy_file = policy_ext.policy_file
+        if not policy_file:
+            raise RuntimeError('Policy file is required!')
 
     file_existed = os.path.exists(policy_file)
     if file_existed and mode in ['safe', None]:
@@ -39,8 +50,7 @@ def generate_policy_file(policy_file, mode, allow):
     default = str(checks.TrueCheck() if allow else checks.FalseCheck())
     for rule in current_app.url_map.iter_rules():
         for method in rule.methods:
-            name = ('%(endpoint)s:%(method)s' %
-                    {'endpoint': rule.endpoint, 'method': method.lower()})
+            name = _utils.build_endpoint_rule_name(rule.endpoint, method)
             policy_rules[name] = default
 
     if file_existed and mode in ['update', 'append']:
