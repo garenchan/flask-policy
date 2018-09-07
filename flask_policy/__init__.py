@@ -7,11 +7,18 @@
 
 """
 
+__all__ = ['Policy', 'PolicyNotAuthorized', 'register', 'Check']
+
 from flask import Flask, g, request
-from policy import Enforcer
+from policy import Enforcer, checks
 from policy.exceptions import PolicyNotAuthorized
 
 from flask_policy import _utils
+
+
+register = checks.register
+
+Check = checks.Check
 
 
 class Policy(object):
