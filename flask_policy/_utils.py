@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     flask_policy._utils
-    ~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~
 
     Some utils for internal use.
 

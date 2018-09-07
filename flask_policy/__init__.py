@@ -17,9 +17,6 @@ from flask_policy import _utils
 class Policy(object):
     """This class is used to integrate Flask application with Policy."""
 
-    #: A callable used to generate policy rule name for endpoint.
-    #: The callable needs at most two positional arguments: (endpoint, method)
-
     def __init__(self, app=None, exc=None):
         self.app = None
         self._enforcer = None

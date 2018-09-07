@@ -14,7 +14,7 @@
     "static:head": "@",
     "static:get": "@",
     "static:options": "@",
-  
+
     "article:delete": "rule:login_required",
     "article:options": "@",
     "delete_article": "rule:admin_or_owner"
