@@ -65,6 +65,9 @@ class Policy(object):
             return
 
         rule = _utils.build_endpoint_rule_name(endpoint, request.method)
+        if self._get_credential_handler is None:
+            raise Exception('Missing credential handler. Use '
+                            'register_credential_handler to register one.')
         cred = self._get_credential_handler()
         allowed = self.enforce(rule, {}, cred)
         # While disallow and not raise error, inject result into `g`,
